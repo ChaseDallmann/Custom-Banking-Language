@@ -16,6 +16,7 @@ DIGITS = '0123456789'
 INT = 'INT'
 FLOAT = 'FLOAT'
 
+
 ########################## ERROR HANDLING ##########################
 class Error:  # Class for Error Handling
     def __init__(self, pos_start, pos_end, error_name, details):
@@ -76,33 +77,35 @@ class Lexer:
     def makeTokens(self):
         tokens = []  # Start with a blank token Array
 
-        charDictionary = {'+': Token.Token(PLUS),
-                          '-': Token.Token(MINUS),
-                          '*': Token.Token(MULTIPLY),
-                          '/': Token.Token(DIVIDE),
-                          '%': Token.Token(MODULO),
-                          '(': Token.Token(LEFTPAREN),
-                          ')': Token.Token(RIGHTPAREN),
-                          ',': Token.Token(COMMA),
-                          ';': Token.Token(SEMICOLON),
-                          ':': Token.Token(COLON),
-                          '.': Token.Token(PERIOD),
-                          '$': Token.Token(DOLLARSIGN),
-                          '0123456789': Token.Token(DIGITS),
-                          ' ': None, '\t': None
-                          }
+        charDictionary = {
+            '+': Token.Token(PLUS, '+'),
+            '-': Token.Token(MINUS, '-'),
+            '*': Token.Token(MULTIPLY, '*'),
+            '/': Token.Token(DIVIDE, '/'),
+            '%': Token.Token(MODULO, '%'),
+            '(': Token.Token(LEFTPAREN, '('),
+            ')': Token.Token(RIGHTPAREN, ')'),
+            ',': Token.Token(COMMA, ','),
+            ';': Token.Token(SEMICOLON, ';'),
+            ':': Token.Token(COLON, ':'),
+            '.': Token.Token(PERIOD, '.'),
+            '$': Token.Token(DOLLARSIGN, '$'),
+            ' ': None,
+            '\t': None
+        }
 
-        while self.currentChar is not None:  # Making sure the current character being parsed isn't nothing
-            if self.currentChar.isdigit():  # Checking to see if the token is a digit
+        while self.currentChar is not None:
+            if self.currentChar.isdigit():
                 tokens.append(self.makeNumber())
-            else:
-                if self.currentChar in charDictionary:
+            elif self.currentChar in charDictionary:
+                if charDictionary[self.currentChar] is not None:
                     tokens.append(charDictionary[self.currentChar])
-                else:
-                    pos_start = self.pos.copy()
-                    char = self.currentChar
-                    self.advance()
-                    return [], IllegalCharError(pos_start, self.pos, "'" + char + "' is not a valid character")
+                self.advance()
+            else:
+                pos_start = self.pos.copy()
+                char = self.currentChar
+                self.advance()
+                return [], IllegalCharError(pos_start, self.pos, "'" + char + "' is not a valid character")
 
         return tokens, None
 
