@@ -1,19 +1,20 @@
-PLUS = 'PLUS'
-MINUS = 'MINUS'
-MULTIPLY = 'MULTIPLY'
-DIVIDE = 'DIVIDE'
-MODULO = 'MODULO'
-LEFTPAREN = 'LEFTPAREN'
-RIGHTPAREN = 'RIGHTPAREN'
-COMMA = 'COMMA'
-PERIOD = 'PERIOD'
-SEMICOLON = 'SEMICOLON'
-COLON = 'COLON'
-DOLLARSIGN = 'DOLLARSIGN'
+import Token
+
+PLUS = '+',
+MINUS = '-'
+MULTIPLY = '*'
+DIVIDE = '/'
+MODULO = '%'
+LEFTPAREN = '('
+RIGHTPAREN = ')'
+COMMA = ','
+PERIOD = '.'
+SEMICOLON = ';'
+COLON = ':'
+DOLLARSIGN = '$'
 DIGITS = '0123456789'
 INT = 'INT'
 FLOAT = 'FLOAT'
-
 
 ########################## ERROR HANDLING ##########################
 class Error:  # Class for Error Handling
@@ -58,18 +59,6 @@ class Position:
         return Position(self.index, self.line, self.column, self.fileName, self.fileText)
 
 
-# The token type
-class Token:
-    def __init__(self, type_, value=None):
-        self.type = type_
-        self.value = value
-
-    def __repr__(self):
-        if self.value:
-            return f'Token({self.type}, {self.value})'
-        return f'{self.type}'
-
-
 # The Lexer class
 class Lexer:
     def __init__(self, file_name, text):
@@ -87,58 +76,37 @@ class Lexer:
     def makeTokens(self):
         tokens = []  # Start with a blank token Array
 
+        charDictionary = {'+': Token.Token(PLUS),
+                          '-': Token.Token(MINUS),
+                          '*': Token.Token(MULTIPLY),
+                          '/': Token.Token(DIVIDE),
+                          '%': Token.Token(MODULO),
+                          '(': Token.Token(LEFTPAREN),
+                          ')': Token.Token(RIGHTPAREN),
+                          ',': Token.Token(COMMA),
+                          ';': Token.Token(SEMICOLON),
+                          ':': Token.Token(COLON),
+                          '.': Token.Token(PERIOD),
+                          '$': Token.Token(DOLLARSIGN),
+                          '0123456789': Token.Token(DIGITS),
+                          ' ': None, '\t': None
+                          }
+
         while self.currentChar is not None:  # Making sure the current character being parsed isn't nothing
-            if self.currentChar.isdigit(): #Checking to see if the token is a digit
+            if self.currentChar.isdigit():  # Checking to see if the token is a digit
                 tokens.append(self.makeNumber())
             else:
-                match self.currentChar:  # Switch statement to match the current character
-                    case ' \t':
-                        self.advance()
-                    case '+':
-                        tokens.append(Token(PLUS))
-                        self.advance()
-                    case '-':
-                        tokens.append(Token(MINUS))
-                        self.advance()
-                    case '*':
-                        tokens.append(Token(MULTIPLY))
-                        self.advance()
-                    case '/':
-                        tokens.append(Token(DIVIDE))
-                        self.advance()
-                    case '(':
-                        tokens.append(Token(LEFTPAREN))
-                        self.advance()
-                    case ')':
-                        tokens.append(Token(RIGHTPAREN))
-                        self.advance()
-                    case ',':
-                        tokens.append(Token(COMMA))
-                        self.advance()
-                    case ';':
-                        tokens.append(Token(SEMICOLON))
-                        self.advance()
-                    case ':':
-                        tokens.append(Token(COLON))
-                        self.advance()
-                    case '.':
-                        tokens.append(Token(PERIOD))
-                        self.advance()
-                    case '%':
-                        tokens.append(Token(MODULO))
-                        self.advance()
-                    case '$':
-                        tokens.append(Token(DOLLARSIGN))
-                        self.advance()
-                    case default:
-                        pos_start = self.pos.copy()
-                        char = self.currentChar
-                        self.advance()
-                        return [], IllegalCharError(pos_start, self.pos, "'" + char + "' is not a valid character")
+                if self.currentChar in charDictionary:
+                    tokens.append(charDictionary[self.currentChar])
+                else:
+                    pos_start = self.pos.copy()
+                    char = self.currentChar
+                    self.advance()
+                    return [], IllegalCharError(pos_start, self.pos, "'" + char + "' is not a valid character")
 
-            return tokens, None
+        return tokens, None
 
-    #A function to create a number/float from a string
+    # A function to create a number/float from a string
     def makeNumber(self):
         numberString = ''
         periodCount = 0
@@ -154,12 +122,12 @@ class Lexer:
             self.advance()
 
         if periodCount == 0:
-            return Token(INT, int(numberString))
+            return Token.Token(INT, int(numberString))
         elif periodCount == 1:
-            return Token(FLOAT, float(numberString))
+            return Token.Token(FLOAT, float(numberString))
 
 
-#A function to run the file
+# A function to run the file
 def run(file_name, text):
     lexer = Lexer(file_name, text)
     tokens, error = lexer.makeTokens()
