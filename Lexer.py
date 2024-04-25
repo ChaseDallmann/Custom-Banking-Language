@@ -55,7 +55,7 @@ class Position:
 
         return self
 
-    # Copying the positon and returning it as a new object
+    # Copying the position and returning it as a new object
     def copy(self):
         return Position(self.index, self.line, self.column, self.fileName, self.fileText)
 
