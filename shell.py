@@ -12,4 +12,4 @@ while True:
     if error:
         print(error.as_string())
     else:
-        print(result)
+        print(ast)

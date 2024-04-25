@@ -1,4 +1,5 @@
 import Token
+import re
 
 PLUS = '+',
 MINUS = '-'
@@ -13,8 +14,10 @@ SEMICOLON = ';'
 COLON = ':'
 DOLLARSIGN = '$'
 DIGITS = '0123456789'
+LETTERS  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 INT = 'INT'
 FLOAT = 'FLOAT'
+WORD = 'WORD'
 
 
 ########################## ERROR HANDLING ##########################
@@ -97,6 +100,8 @@ class Lexer:
         while self.currentChar is not None:
             if self.currentChar.isdigit():
                 tokens.append(self.makeNumber())
+            elif re.match("^[a-zA-Z]",self.currentChar):
+                tokens.append(self.makeWord())
             elif self.currentChar in charDictionary:
                 if charDictionary[self.currentChar] is not None:
                     tokens.append(charDictionary[self.currentChar])
@@ -128,6 +133,14 @@ class Lexer:
             return Token.Token(INT, int(numberString))
         elif periodCount == 1:
             return Token.Token(FLOAT, float(numberString))
+        
+    def makeWord(self):
+        wordString = ''
+        while self.currentChar is not None and re.match("[a-zA-Z]",self.currentChar):
+            wordString += self.currentChar
+            self.advance()
+
+        return Token.Token(WORD, wordString)
 
 
 # A function to run the file
