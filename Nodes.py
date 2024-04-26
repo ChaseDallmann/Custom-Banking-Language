@@ -5,12 +5,18 @@ class NumberNode:
     def __repr__(self):
         return f'{self.tok}'
 
+
 class NameNode:
-    def __init__(self, tok):
+    def __init__(self, tok, tok2=None):
         self.tok = tok
+        self.tok2 = tok2
 
     def __repr__(self):
-        return f'{self.tok}'
+        if self.tok2:
+            return f'{self.tok} {self.tok2}'
+        else:
+            return f'{self.tok}'
+
 
 class OperatorNode:
     def __init__(self, tok):
@@ -18,6 +24,7 @@ class OperatorNode:
 
     def __repr__(self):
         return f'{self}'
+
 
 class TransNode:
 

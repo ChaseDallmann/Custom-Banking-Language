@@ -1,5 +1,7 @@
 import Nodes
 import Lexer
+
+
 class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
@@ -18,24 +20,19 @@ class Parser:
 
     def namePart(self, part):
         tok = self.currentToken
-        if tok.type in (Lexer.WORD):
+        if tok.type == Lexer.WORD:
             self.advance()
-            return Nodes.NameNode(part)
-
+            return Nodes.NameNode(tok.value)
 
     def fullName(self, firstName, lastName):
-        tok = self.currentToken
-        if tok.type in (Lexer.WORD):
-            first = self.namePart(firstName)
-            last = self.namePart(lastName)
-        return first, last
+        return Nodes.NameNode(firstName, lastName)
 
     def number(self):
         tok = self.currentToken
         if tok.type in (Lexer.INT, Lexer.FLOAT):
             self.advance()
             return Nodes.NumberNode(tok.value)
-    
+
     def id(self):
         pass
 
@@ -46,16 +43,16 @@ class Parser:
             return Nodes.OperatorNode(tok)
 
     def transaction(self):
-        tok = self.currentToken
-        while self.currentToken is not None:
+        while self.currentToken is not None and self.tokenIndex < len(self.tokens):
+            tok = self.currentToken
             if tok.type in (Lexer.PLUS, Lexer.MINUS):
-                op = Nodes.OperatorNode(tok)
+                op = self.operator()
             elif tok.type in (Lexer.WORD):
                 first = self.namePart(tok.value)
                 if tok.type in (Lexer.WORD):
                     last = self.namePart(tok.value)
                     full = self.fullName(first, last)
             if tok.type in (Lexer.INT, Lexer.FLOAT):
-                amount = self.number(tok)
-            trans = Nodes.TransNode(full, 47343, op, amount)
+                amount = self.number()
+                trans = Nodes.TransNode(full, 47343, op, amount)
         return trans

@@ -1,0 +1,16 @@
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+       | "V" | "W" | "X" | "Y" | "Z" ;
+namepart = letter , { letter } ;
+fullname = namepart , namepart ;
+float = (digit - "0"), { digit }, ".", digit, {digit} ;
+integer = (digit - "0"), {digit} ;
+sign = "+" | "-" ;
+value = integer | float ;
+account = letter, letter, digit, digit, digit, digit, digit, digit ;
+
+command = fullname, account, sign, value ;
+transaction = fullname, ("deposited" | "withdrew"), value, ("into" | "from") ;
+return = fullname, transaction, account, "Your new balance is now:", value ;
