@@ -2,6 +2,8 @@ import Nodes
 import Lexer
 
 
+
+
 class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
@@ -36,11 +38,20 @@ class Parser:
     def id(self):
         pass
 
-    def operator(self):
-        tok = self.currentToken
-        if tok.type in (Lexer.PLUS, Lexer.MINUS):
-            self.advance()
-            return Nodes.OperatorNode(tok.value)
+
+    def operator(self, tok):
+        if tok in ('+', '-', '*'):
+            operation = tok
+        elif tok == 'deposited':
+            operation = '+'
+        elif tok == 'withdrew':
+            operation = '-'
+        elif tok == 'accrued':
+            operation = '*'
+        else:
+            raise Exception(f"Unsupported operator: {tok}")
+
+        return Nodes.OperatorNode(tok, operation)
 
     def transaction(self):
         while self.currentToken is not None and self.tokenIndex < len(self.tokens):
@@ -54,5 +65,5 @@ class Parser:
                     full = self.fullName(first, last)
             if tok.type in (Lexer.INT, Lexer.FLOAT):
                 amount = self.number()
-                trans = Nodes.TransNode(full, 47343, op, amount)
+                trans = Nodes.TransactionNode(full, 47343, op, amount)
         return trans

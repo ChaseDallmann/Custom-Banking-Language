@@ -19,15 +19,14 @@ class NameNode:
 
 
 class OperatorNode:
-    def __init__(self, tok):
+    def __init__(self, tok, operation):
         self.tok = tok
+        self.operation = operation
 
     def __repr__(self):
-        return f'{self}'
+        return f'{self.tok}'
 
-
-class TransNode:
-
+class TransactionNode:
     def __init__(self, nameNode, accountNode, operatorNode, numberNode):
         self.nameNode = nameNode
         self.accountNode = accountNode
