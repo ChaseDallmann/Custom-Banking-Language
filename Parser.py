@@ -40,7 +40,7 @@ class Parser:
         tok = self.currentToken
         if tok.type in (Lexer.PLUS, Lexer.MINUS):
             self.advance()
-            return Nodes.OperatorNode(tok)
+            return Nodes.OperatorNode(tok.value)
 
     def transaction(self):
         while self.currentToken is not None and self.tokenIndex < len(self.tokens):
