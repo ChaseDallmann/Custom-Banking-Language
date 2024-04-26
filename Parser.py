@@ -55,7 +55,7 @@ class Parser:
             raise Exception(f"Unsupported operator: {tok}")
         
         # Get the tokens before and after the operator
-        node_a = self.tokens[self.tokenIndex - 1]
+        node_a = self.tokens[self.tokenIndex - 1] # THIS NEEDS TO BE CHANGED TO FIND THE ACCOUNT NODE BASED ON THE ACCOUNT NUMBER
         node_b = self.tokens[self.tokenIndex + 1]
 
         self.advance()
