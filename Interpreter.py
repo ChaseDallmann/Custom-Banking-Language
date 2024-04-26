@@ -35,6 +35,3 @@ class Interpreter:
             return self.visit(node.node_a) * self.visit(node.node_b)
         else:
             raise Exception(f"Invalid operation: {node.operation}")
-        
-    def interpret(self):
-
