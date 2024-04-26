@@ -140,7 +140,14 @@ class Lexer:
             wordString += self.currentChar
             self.advance()
 
-        return Token.Token(WORD, wordString)
+        if wordString == 'deposited':
+            return Token.Token(PLUS, wordString)
+        elif wordString == 'withdrew':
+            return Token.Token(MINUS, wordString)
+        elif wordString == 'accrued':
+            return Token.Token(MULTIPLY, wordString)
+        else:
+            return Token.Token(WORD, wordString)
 
 
 # A function to run the file

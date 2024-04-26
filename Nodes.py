@@ -19,9 +19,12 @@ class NameNode:
 
 
 class OperatorNode:
-    def __init__(self, tok, operation):
+    # Operation has been decoupled from the token to support operation words
+    def __init__(self, tok, operation, node_a, node_b):
         self.tok = tok
         self.operation = operation
+        self.node_a = node_a
+        self.node_b = node_b
 
     def __repr__(self):
         return f'{self.tok}'
