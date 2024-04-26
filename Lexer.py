@@ -1,7 +1,7 @@
 import Token
 import re
 
-PLUS = '+',
+PLUS = '+'
 MINUS = '-'
 MULTIPLY = '*'
 DIVIDE = '/'

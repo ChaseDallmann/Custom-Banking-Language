@@ -40,6 +40,7 @@ class Parser:
 
 
     def operator(self, tok):
+        tok = tok.value
         if tok in ('+', '-', '*'):
             operation = tok
         elif tok == 'deposited':
@@ -51,13 +52,14 @@ class Parser:
         else:
             raise Exception(f"Unsupported operator: {tok}")
 
+        self.advance()
         return Nodes.OperatorNode(tok, operation)
 
     def transaction(self):
         while self.currentToken is not None and self.tokenIndex < len(self.tokens):
             tok = self.currentToken
             if tok.type in (Lexer.PLUS, Lexer.MINUS):
-                op = self.operator()
+                op = self.operator(tok)
             elif tok.type in (Lexer.WORD):
                 first = self.namePart(tok.value)
                 if tok.type in (Lexer.WORD):
