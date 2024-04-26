@@ -18,6 +18,7 @@ LETTERS  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 INT = 'INT'
 FLOAT = 'FLOAT'
 WORD = 'WORD'
+NEWTRANS = '~'
 
 
 ########################## ERROR HANDLING ##########################
@@ -30,7 +31,6 @@ class Error:  # Class for Error Handling
 
     def as_string(self):
         result = f'{self.error_name}: {self.details}'
-        result += f' File{self.pos_start.fileName}:Line {self.pos_start.line + 1}'
         return result
 
 
@@ -41,12 +41,11 @@ class IllegalCharError(Error):
 
 ########################## CHARACTER POSITION ##########################
 class Position:
-    def __init__(self, index, line, column, fileName, fileText):
+    def __init__(self, index, line, column, text):
         self.index = index
         self.line = line
         self.column = column
-        self.fileName = fileName
-        self.fileText = fileText
+        self.text = text
 
     def advance(self, currentChar):  # Advancing the current char
         self.index += 1
@@ -60,14 +59,14 @@ class Position:
 
     # Copying the position and returning it as a new object
     def copy(self):
-        return Position(self.index, self.line, self.column, self.fileName, self.fileText)
+        return Position(self.index, self.line, self.column, self.text)
 
 
 # The Lexer class
 class Lexer:
-    def __init__(self, file_name, text):
+    def __init__(self, text):
         self.text = text
-        self.pos = Position(-1, 0, -1, file_name, text)  # Creating a position object
+        self.pos = Position(-1, 0, -1, text)  # Creating a position object
         self.currentChar = None
         self.advance()
 
@@ -93,6 +92,7 @@ class Lexer:
             ':': Token.Token(COLON, ':'),
             '.': Token.Token(PERIOD, '.'),
             '$': Token.Token(DOLLARSIGN, '$'),
+            '\n': Token.Token(NEWTRANS, '~'),
             ' ': None,
             '\t': None
         }
@@ -106,6 +106,9 @@ class Lexer:
                 if charDictionary[self.currentChar] is not None:
                     tokens.append(charDictionary[self.currentChar])
                 self.advance()
+            #elif self.currentChar == '\n':
+                #tokens.append(Token.Token(NEWTRANS, '\n'))
+                #self.advance()
             else:
                 pos_start = self.pos.copy()
                 char = self.currentChar
@@ -150,9 +153,9 @@ class Lexer:
             return Token.Token(WORD, wordString)
 
 
-# A function to run the file
-def run(file_name, text):
-    lexer = Lexer(file_name, text)
+# A function to create and run the lexer
+def run(text):
+    lexer = Lexer(text)
     tokens, error = lexer.makeTokens()
 
     return tokens, error

@@ -62,6 +62,8 @@ class Parser:
         return Nodes.OperatorNode(tok, operation, node_a, node_b)
 
     def transaction(self):
+        transList = []
+        trans = None
         while self.currentToken is not None and self.tokenIndex < len(self.tokens):
             tok = self.currentToken
             if tok.type in (Lexer.PLUS, Lexer.MINUS):
@@ -77,4 +79,7 @@ class Parser:
             if tok.type in (Lexer.INT, Lexer.FLOAT):
                 amount = self.number()
                 trans = Nodes.TransactionNode(full, 47343, op, amount)
-        return trans
+            if self.currentToken.type == Lexer.NEWTRANS:
+                transList.append(trans)
+                self.advance()
+        return transList

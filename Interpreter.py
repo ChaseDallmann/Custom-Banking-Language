@@ -1,4 +1,13 @@
 class Interpreter:
+    
+    # Constructor
+    def __init__(self, astList):
+        self.astList = astList
+        self.name = None
+        self.account = None
+        self.operation = None
+        self.amount = None
+    
     # Visit is called by the interpreter with a node as an argument
     def visit(self, node):
         # Get's the method name to call conditionally based on the node's type
@@ -13,6 +22,9 @@ class Interpreter:
 
     def visit_NumberNode(self, node):
         return node.value
+    
+    def visit_NameNode(self, node):
+        return node.value
 
     def visit_OperatorNode(self, node):
         if node.operation == '+':
@@ -23,3 +35,6 @@ class Interpreter:
             return self.visit(node.node_a) * self.visit(node.node_b)
         else:
             raise Exception(f"Invalid operation: {node.operation}")
+        
+    def interpret(self):
+
