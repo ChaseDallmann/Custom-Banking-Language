@@ -38,3 +38,17 @@ class TransactionNode:
 
     def __repr__(self):
         return f'{self.nameNode} {self.accountNode} {self.operatorNode.tok} {self.numberNode.tok}'
+    
+class AccountNode:
+    def __init__(self, tok):
+        self.accountNumber = tok
+        
+    def getAccount(self, accountManager):
+        # This method should return the Account object with the given account number.
+        # For our purposes a simple linear search will be fine.
+        for account in accountManager.accounts:
+            if account.accountNumber == self.accountNumber:
+                return account
+
+    def __repr__(self):
+        return f'{self.tok}'
