@@ -29,7 +29,7 @@ class AccountManager:
                 accounts = json.loads(line)
                 for account in accounts:
                     self.accounts.append(account)
-                    if not account['ID'] == ID:
+                    if account['ID'] == ID:
                         self.accounts.remove(account)
             file = open(self.filePath, 'w')
             json.dump(self.accounts, file)
