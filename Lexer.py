@@ -14,11 +14,15 @@ SEMICOLON = ';'
 COLON = ':'
 DOLLARSIGN = '$'
 DIGITS = '0123456789'
-LETTERS  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 INT = 'INT'
 FLOAT = 'FLOAT'
 WORD = 'WORD'
 NEWTRANS = '~'
+ID = 'ID'
+CREATE = 'CREATE'
+REMOVE = 'REMOVE'
+VIEW = 'VIEW'
 
 
 ########################## ERROR HANDLING ##########################
@@ -92,6 +96,7 @@ class Lexer:
             ':': Token.Token(COLON, ':'),
             '.': Token.Token(PERIOD, '.'),
             '$': Token.Token(DOLLARSIGN, '$'),
+            'ID': Token.Token(ID, 'ID'),
             '\n': Token.Token(NEWTRANS, '~'),
             ' ': None,
             '\t': None
@@ -100,8 +105,12 @@ class Lexer:
         while self.currentChar is not None:
             if self.currentChar.isdigit():
                 tokens.append(self.makeNumber())
-            elif re.match("^[a-zA-Z]",self.currentChar):
-                tokens.append(self.makeWord())
+            elif re.match("[a-zA-Z]",self.currentChar):
+                match = re.match('\\d',self.text[self.pos.index + 2]) #Checking to see what the 3rd char is
+                if match and self.text[self.pos.index + 2] == match.group(0):
+                    tokens.append(self.makeID())
+                else:
+                    tokens.append(self.makeWord())
             elif self.currentChar in charDictionary:
                 if charDictionary[self.currentChar] is not None:
                     tokens.append(charDictionary[self.currentChar])
@@ -143,15 +152,21 @@ class Lexer:
             wordString += self.currentChar
             self.advance()
 
-        if wordString == 'deposited':
+        if wordString.lower() == 'deposited':
             return Token.Token(PLUS, wordString)
-        elif wordString == 'withdrew':
+        elif wordString.lower() == 'withdrew':
             return Token.Token(MINUS, wordString)
-        elif wordString == 'accrued':
+        elif wordString.lower() == 'accrued':
             return Token.Token(MULTIPLY, wordString)
         else:
             return Token.Token(WORD, wordString)
 
+    def makeID(self):
+        idString = ''
+        while self.currentChar is not None and re.match("[a-zA-Z\\d]",self.currentChar):
+            idString += self.currentChar
+            self.advance()
+        return Token.Token(ID, idString)
 
 # A function to create and run the lexer
 def run(text):

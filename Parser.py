@@ -40,7 +40,7 @@ class Parser:
             self.advance()
             return Nodes.NumberNode(tok.value)
 
-    def id(self):
+    def account(self):
         tok = self.currentToken
         if tok.type in (Lexer.WORD):  # Word Token handling
             if tok.value in self.operator_words:
@@ -51,6 +51,12 @@ class Parser:
                     last = self.namePart(tok.value)
                     full = self.fullName(first, last)
         return Nodes.AccountNode(full)
+
+    def id(self):
+        tok = self.currentToken
+        if tok.type in (Lexer.ID):
+            self.advance()
+            return Nodes.idNode(tok.value)
 
 
     def operator(self, tok):
@@ -89,9 +95,11 @@ class Parser:
                     if tok.type in (Lexer.WORD):
                         last = self.namePart(tok.value)
                         full = self.fullName(first, last)
+            if tok.type in (Lexer.ID): #Creating an ID
+                id = self.id()
             if tok.type in (Lexer.INT, Lexer.FLOAT): #Int/Float Token hanlding
                 amount = self.number()
-                trans = Nodes.TransactionNode(full, 47343, op, amount)
+                trans = Nodes.TransactionNode(full, id, op, amount)
             if self.currentToken.type == Lexer.NEWTRANS:
                 transList.append(trans)
                 self.advance()

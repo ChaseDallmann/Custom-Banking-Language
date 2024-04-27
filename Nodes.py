@@ -36,6 +36,13 @@ class OperatorNode:
     def __repr__(self):
         return f'{self.tok}'
 
+class idNode:
+    def __init__(self, tok):
+        self.tok = tok
+
+    def __repr__(self):
+        return f'{self.tok}'
+
 #Creating a node that has the account information
 class AccountNode:
     def __init__(self, nameNode):
@@ -50,7 +57,7 @@ class AccountNode:
         return f'Account(name={self.name}, ID={self.ID}, accountID={self.accountID}, balance={self.balance})'
 
     #Finding the ID in the JSON file
-    def findID(self):
+    def findAccountID(self):
         try:
             file = open(self.filePath, 'r')  # Opening Accounts.JSON
             for line in file:
@@ -72,9 +79,9 @@ class AccountNode:
 
     #Dictionary entry to create a JSON format
     def to_dict(self):
-        self.ID = self.findID()
+        self.ID = self.findAccountID()
         return {
-            "Name": self.nameNode.tok.tok + self.nameNode.tok2.tok,
+            "Name": self.nameNode.tok.tok + ' ' + self.nameNode.tok2.tok,
             "ID": self.ID,
             "BALANCE": self.balance
         }
@@ -96,6 +103,3 @@ class TransactionNode:
         for account in accountManager.accounts:
             if account.accountNumber == self.accountNumber:
                 return account
-
-    def __repr__(self):
-        return f'{self.tok}'

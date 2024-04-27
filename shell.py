@@ -35,3 +35,6 @@ while True:
         elif choice == '3':
             text = input("Please enter the account ID to delete: ")
             manager.dropAccount(text)
+    result, error = Lexer.run(text)
+    parser = Parser.Parser(result)
+    astList = parser.parse()
