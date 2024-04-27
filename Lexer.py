@@ -146,15 +146,19 @@ class Lexer:
             return Token.Token(MINUS, wordString)
         elif wordString.lower() in ('accrued', 'accrue', 'accrues'):
             return Token.Token(MULTIPLY, wordString)
-        elif wordString.lower() == 'create':
+        elif wordString.lower() in ('create', 'open', 'creates', 'opens', 'opened'):
             return Token.Token(CREATE, wordString)
+        elif wordString.lower() in ('drop', 'close', 'drops', 'closes', 'closed'):
+            return Token.Token(DROP, wordString)
+        elif wordString.lower() in ('view', 'views', 'viewed'):
+            return Token.Token(VIEW, wordString)
         else:
-            return Token.Token(WORD, wordString)
+            return Token.Token(WORD, wordString.upper())
 
     def makeID(self):
         idString = ''
         while self.currentChar is not None and re.match("[a-zA-Z\\d]",self.currentChar):
-            idString += self.currentChar
+            idString += self.currentChar.upper()
             self.advance()
         return Token.Token(ID, idString)
 

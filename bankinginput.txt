@@ -1,0 +1,9 @@
+CHASE DALLMANN CD000001 + 500
+JOHN PETRIE JP000011 create
+JOHN PETRIE JP000011 + 500
+Bo Petrie create
+Bo Petrie BP000001 + 100
+jane doe create
+Bo Petrie BP000001 accrues 1.05
+jane doe jd000001 drop
+John Petrie JP000123 drop

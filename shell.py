@@ -9,7 +9,7 @@ while True:
         if not text.endswith('\n'):
             text += '\n'
     elif option == '2':
-        with open('test.txt', 'r') as file:
+        with open('bankinginput.txt', 'r') as file:
             lines = file.readlines()
         text = ''.join(line.rstrip() + '\n' for line in lines)
     result, error = Lexer.run(text)

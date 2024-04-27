@@ -36,6 +36,8 @@ class Parser:
     def id(self, tok):
         if tok.type in (Lexer.ID):
             return Nodes.IDNode(tok.value)
+        else:
+            return None
 
     # Creating an operator node
     def operator(self, tok):
@@ -46,7 +48,7 @@ class Parser:
             raise Exception(f"Unsupported operator: {tok}")
         
         # Get the tokens before and after the operator
-        account_node = self.id(self.tokens[self.tokenIndex - 1]) # THIS NEEDS TO BE CHANGED TO FIND THE ACCOUNT NODE BASED ON THE ACCOUNT NUMBER
+        account_node = self.id(self.tokens[self.tokenIndex - 1])
         number_node = self.number(self.tokens[self.tokenIndex + 1])
 
         self.advance()
