@@ -22,14 +22,16 @@ while True:
         else:
             print(astList)
     elif option == '3':
-        choice = input("Enter '1' to create an account, '2' to remove and account")
+        choice = input("Enter '1' to create an account, '2' view account list, '3' delete an account")
+        manager = account_manager.AccountManager()
         if choice == '1':
             text = input("Please enter your First and Last name")
             result, error = Lexer.run(text)
             parser = Parser.Parser(result)
             account = parser.id()
-            manager = account_manager.AccountManager()
             manager.addAccount(account)
         elif choice == '2':
-            manager = account_manager.AccountManager()
             manager.loadAccounts()
+        elif choice == '3':
+            text = input("Please enter the account ID to delete: ")
+            manager.dropAccount(text)

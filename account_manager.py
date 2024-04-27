@@ -22,8 +22,21 @@ class AccountManager:
         file.close()
         print(f'Account added to the Accounts.JSON file')
 
-    def dropAccount(self, account):
-        self.accounts.remove(account)
+    def dropAccount(self, ID):
+        try:
+            file = open(self.filePath, 'r')
+            for line in file:
+                accounts = json.loads(line)
+                for account in accounts:
+                    self.accounts.append(account)
+                    if not account['ID'] == ID:
+                        self.accounts.remove(account)
+            file = open(self.filePath, 'w')
+            json.dump(self.accounts, file)
+        except JSONDecodeError:
+            print(f'File is empty no accounts to remove')
+
+
 
     def loadAccounts(self, ):
         try:
