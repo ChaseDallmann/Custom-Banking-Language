@@ -22,13 +22,6 @@ class Parser:
             self.currentToken = self.tokens[self.tokenIndex]
         return self.currentToken
 
-    #Creating a node for parts of a name
-    def namePart(self, part):
-        tok = part
-        if tok.type == Lexer.WORD:
-            self.advance()
-            return tok
-
     #Creating a name node
     def fullName(self, firstName, lastName):
         return Nodes.NameNode(firstName, lastName)
@@ -70,23 +63,21 @@ class Parser:
         trans = None
         while self.currentToken is not None and self.tokenIndex < len(self.tokens):
             tok = self.currentToken
-            if tok.type in (Lexer.PLUS, Lexer.MINUS): #Operator Token handling
+            if tok.type in (Lexer.PLUS, Lexer.MINUS, Lexer.MULTIPLY): #Operator Token handling
                 op = self.operator(tok)
-            elif tok.type in (Lexer.WORD): #Word Token handling
+            elif tok.type == (Lexer.WORD): #Word Token handling
                 if tok.value in self.operator_words:
                     op = self.operator(tok)
                 else:
                     first = self.currentToken
                     self.advance()
-                    if self.currentToken.type in (Lexer.WORD):
+                    if self.currentToken.type == (Lexer.WORD):
                         last = self.currentToken
                         full = self.fullName(first, last)
-            if tok.type in (Lexer.ID): #Creating an ID
-                self.advance()
-            if tok.type in (Lexer.INT, Lexer.FLOAT): #Int/Float Token hanlding
-                self.advance()
+            elif self.currentToken.type == Lexer.NEWTRANS:
                 trans = Nodes.TransactionNode(full, op)
-            if self.currentToken.type == Lexer.NEWTRANS:
                 transList.append(trans)
+                self.advance()
+            else:
                 self.advance()
         return transList

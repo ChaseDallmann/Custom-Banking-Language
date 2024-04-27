@@ -1,8 +1,6 @@
 import Lexer
 import Parser
 import Interpreter
-import Nodes
-import Token
 
 while True:
     option = input("Enter '1' to enter a command, '2' to read commands from a file: ")
