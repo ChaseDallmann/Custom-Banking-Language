@@ -1,1 +1,4 @@
-[{"Name": "ChaseDallmann", "ID": "CD000001", "BALANCE": 0}, {"Name": "ChaseDallmann", "ID": "CD000002", "BALANCE": 0}]
+{
+    "JP000001": 500,
+    "CD000001": 1000
+}

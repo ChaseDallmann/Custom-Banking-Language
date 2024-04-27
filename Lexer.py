@@ -4,8 +4,6 @@ import re
 PLUS = '+'
 MINUS = '-'
 MULTIPLY = '*'
-DIVIDE = '/'
-MODULO = '%'
 LEFTPAREN = '('
 RIGHTPAREN = ')'
 COMMA = ','
@@ -87,8 +85,6 @@ class Lexer:
             '+': Token.Token(PLUS, '+'),
             '-': Token.Token(MINUS, '-'),
             '*': Token.Token(MULTIPLY, '*'),
-            '/': Token.Token(DIVIDE, '/'),
-            '%': Token.Token(MODULO, '%'),
             '(': Token.Token(LEFTPAREN, '('),
             ')': Token.Token(RIGHTPAREN, ')'),
             ',': Token.Token(COMMA, ','),

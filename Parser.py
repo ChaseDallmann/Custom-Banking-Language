@@ -52,13 +52,14 @@ class Parser:
                     full = self.fullName(first, last)
         return Nodes.AccountNode(full)
 
+    # Creating an ID node
     def id(self):
         tok = self.currentToken
         if tok.type in (Lexer.ID):
             self.advance()
-            return Nodes.idNode(tok.value)
+            return Nodes.IDNode(tok.value)
 
-
+    # Creating an operator node
     def operator(self, tok):
         tok = tok.value
         if tok in ('+', '-', '*'):
@@ -73,13 +74,13 @@ class Parser:
             raise Exception(f"Unsupported operator: {tok}")
         
         # Get the tokens before and after the operator
-        node_a = self.tokens[self.tokenIndex - 1] # THIS NEEDS TO BE CHANGED TO FIND THE ACCOUNT NODE BASED ON THE ACCOUNT NUMBER
+        account_node = self.tokens[self.tokenIndex - 1] # THIS NEEDS TO BE CHANGED TO FIND THE ACCOUNT NODE BASED ON THE ACCOUNT NUMBER
         node_b = self.tokens[self.tokenIndex + 1]
 
         self.advance()
-        return Nodes.OperatorNode(tok, operation, node_a, node_b)
+        return Nodes.OperatorNode(tok, operation, account_node, node_b)
 
-    #Creates a transaction node by passing in seperate nodes
+    #Creates a transaction AST by passing in seperate nodes, then adds it to a list of ASTs
     def transaction(self):
         transList = []
         trans = None
@@ -99,7 +100,7 @@ class Parser:
                 id = self.id()
             if tok.type in (Lexer.INT, Lexer.FLOAT): #Int/Float Token hanlding
                 amount = self.number()
-                trans = Nodes.TransactionNode(full, id, op, amount)
+                trans = Nodes.TransactionNode(full, op)
             if self.currentToken.type == Lexer.NEWTRANS:
                 transList.append(trans)
                 self.advance()
