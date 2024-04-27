@@ -7,22 +7,19 @@ from json import JSONDecodeError
 
 class NumberNode:
     def __init__(self, tok):
-        self.tok = tok
+        self.value = tok
 
     def __repr__(self):
-        return f'{self.tok}'
+        return f'{self.value}'
 
 
 class NameNode:
-    def __init__(self, tok, tok2=None):
-        self.tok = tok
-        self.tok2 = tok2
+    def __init__(self, firstName, lastName):
+        self.firstName = firstName
+        self.lastName = lastName
 
     def __repr__(self):
-        if self.tok2:
-            return f'{self.tok} {self.tok2}'
-        else:
-            return f'{self.tok}'
+        return f'{self.firstName.value} {self.lastName.value}'
 
 
 class OperatorNode:
@@ -34,7 +31,7 @@ class OperatorNode:
         self.NumberNode = NumberNode
 
     def __repr__(self):
-        return f'{self.tok}'
+        return f'{self.IDNode.value} {self.tok} {self.NumberNode.value}'
 
 #Creating a node that has the account information
 class IDNode:

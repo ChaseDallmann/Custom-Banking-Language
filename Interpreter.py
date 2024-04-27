@@ -10,11 +10,16 @@ class Interpreter:
     
     def get_balance(self, account_id):
         self.data.get(account_id)
-                
-        raise Exception(f"Account with ID {account_id} not found")
+        if account_id not in self.data:
+            raise Exception(f"Account {account_id} not found")
+        return self.data[account_id]
     
     def change_balance(self, account_id, new_balance):
         self.data[account_id] = new_balance
+        
+    def save_data(self):
+        with open('Accounts.JSON', 'w') as f:
+            json.dump(self.data, f)
     
     # Visit is called by the interpreter with a node as an argument
     def visit(self, node):
@@ -37,10 +42,10 @@ class Interpreter:
         return node.value
     
     def visit_NameNode(self, node):
-        return f'{node.tok} {node.tok2}'
+        return f'{node.firstName.value} {node.lastName.value}'
 
     def visit_IDNode(self, node):
-        return node.account_id
+        return self.get_balance(node.account_id)
 
     def visit_OperatorNode(self, node):
         if node.operation == '+':
@@ -61,4 +66,6 @@ class Interpreter:
     def interpret(self):
         for ast in self.astList:
             self.visit(ast)
+            self.save_data()
+            
             

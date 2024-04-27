@@ -111,9 +111,6 @@ class Lexer:
                 if charDictionary[self.currentChar] is not None:
                     tokens.append(charDictionary[self.currentChar])
                 self.advance()
-            #elif self.currentChar == '\n':
-                #tokens.append(Token.Token(NEWTRANS, '\n'))
-                #self.advance()
             else:
                 pos_start = self.pos.copy()
                 char = self.currentChar
