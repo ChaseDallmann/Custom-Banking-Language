@@ -22,15 +22,18 @@ class Parser:
             self.currentToken = self.tokens[self.tokenIndex]
         return self.currentToken
 
+    #Creating a node for parts of a name
     def namePart(self, part):
         tok = self.currentToken
         if tok.type == Lexer.WORD:
             self.advance()
             return Nodes.NameNode(tok.value)
 
+    #Creating a name node
     def fullName(self, firstName, lastName):
         return Nodes.NameNode(firstName, lastName)
 
+    #Creating a number node
     def number(self):
         tok = self.currentToken
         if tok.type in (Lexer.INT, Lexer.FLOAT):
@@ -38,7 +41,16 @@ class Parser:
             return Nodes.NumberNode(tok.value)
 
     def id(self):
-        pass
+        tok = self.currentToken
+        if tok.type in (Lexer.WORD):  # Word Token handling
+            if tok.value in self.operator_words:
+                op = self.operator(tok)
+            else:
+                first = self.namePart(tok.value)
+                if tok.type in (Lexer.WORD):
+                    last = self.namePart(tok.value)
+                    full = self.fullName(first, last)
+        return Nodes.AccountNode(full)
 
 
     def operator(self, tok):
@@ -61,14 +73,15 @@ class Parser:
         self.advance()
         return Nodes.OperatorNode(tok, operation, node_a, node_b)
 
+    #Creates a transaction node by passing in seperate nodes
     def transaction(self):
         transList = []
         trans = None
         while self.currentToken is not None and self.tokenIndex < len(self.tokens):
             tok = self.currentToken
-            if tok.type in (Lexer.PLUS, Lexer.MINUS):
+            if tok.type in (Lexer.PLUS, Lexer.MINUS): #Operator Token handling
                 op = self.operator(tok)
-            elif tok.type in (Lexer.WORD):
+            elif tok.type in (Lexer.WORD): #Word Token handling
                 if tok.value in self.operator_words:
                     op = self.operator(tok)
                 else:
@@ -76,7 +89,7 @@ class Parser:
                     if tok.type in (Lexer.WORD):
                         last = self.namePart(tok.value)
                         full = self.fullName(first, last)
-            if tok.type in (Lexer.INT, Lexer.FLOAT):
+            if tok.type in (Lexer.INT, Lexer.FLOAT): #Int/Float Token hanlding
                 amount = self.number()
                 trans = Nodes.TransactionNode(full, 47343, op, amount)
             if self.currentToken.type == Lexer.NEWTRANS:
