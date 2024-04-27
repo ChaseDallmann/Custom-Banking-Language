@@ -2,6 +2,7 @@ import json
 import re
 import os
 import sys
+from json import JSONDecodeError
 
 
 class NumberNode:
@@ -50,7 +51,7 @@ class AccountNode:
 
     #Finding the ID in the JSON file
     def findID(self):
-        if os.path.getsize(self.filePath) > 0:
+        try:
             file = open(self.filePath, 'r')  # Opening Accounts.JSON
             for line in file:
                 accounts = json.loads(line) #The accounts themselves parsed from the loader
@@ -62,7 +63,7 @@ class AccountNode:
                             self.ID = self.accountID
                     else:
                         self.accountID = 0
-        else:
+        except JSONDecodeError:
             pass
         if not self.accountID == 0:
             self.accountID = int(self.accountID) + 1   #Adding 1 to the ID if it isnt 0

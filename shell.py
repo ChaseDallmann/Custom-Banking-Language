@@ -31,4 +31,5 @@ while True:
             manager = account_manager.AccountManager()
             manager.addAccount(account)
         elif choice == '2':
-            pass
+            manager = account_manager.AccountManager()
+            manager.loadAccounts()

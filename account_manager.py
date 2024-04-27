@@ -24,14 +24,15 @@ class AccountManager:
 
     def dropAccount(self, account):
         self.accounts.remove(account)
-        
-    def loadAccounts(self,):
+
+    def loadAccounts(self, ):
         try:
             file = open(self.filePath, 'r')
+            for line in file:
+                accounts = json.loads(line)
+                for account in accounts:
+                    self.accounts.append(account)
+            print(self.accounts)
         except JSONDecodeError:
             fileContents = []
-        for line in file:
-            accounts = json.load(file)
-            for account in accounts:
-                self.accounts.append(account)
         return self.accounts
