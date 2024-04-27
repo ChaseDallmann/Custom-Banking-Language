@@ -140,11 +140,11 @@ class Lexer:
             wordString += self.currentChar
             self.advance()
 
-        if wordString.lower() == 'deposited':
+        if wordString.lower() in ('deposited', 'deposit', 'deposits'):
             return Token.Token(PLUS, wordString)
-        elif wordString.lower() == 'withdrew':
+        elif wordString.lower() in ('withdrew', 'withdraw', 'withdraws'):
             return Token.Token(MINUS, wordString)
-        elif wordString.lower() == 'accrued':
+        elif wordString.lower() in ('accrued', 'accrue', 'accrues'):
             return Token.Token(MULTIPLY, wordString)
         else:
             return Token.Token(WORD, wordString)

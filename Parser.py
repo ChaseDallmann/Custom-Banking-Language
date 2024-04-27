@@ -5,7 +5,6 @@ import Lexer
 
 
 class Parser:
-    operator_words = ['deposited', 'withdrew', 'accrued']
     
     def __init__(self, tokens):
         self.tokens = tokens
@@ -38,15 +37,9 @@ class Parser:
 
     # Creating an operator node
     def operator(self, tok):
-        tok = tok.value
+        tok = tok.type
         if tok in ('+', '-', '*'):
             operation = tok
-        elif tok == 'deposited':
-            operation = '+'
-        elif tok == 'withdrew':
-            operation = '-'
-        elif tok == 'accrued':
-            operation = '*'
         else:
             raise Exception(f"Unsupported operator: {tok}")
         
@@ -66,14 +59,11 @@ class Parser:
             if tok.type in (Lexer.PLUS, Lexer.MINUS, Lexer.MULTIPLY): #Operator Token handling
                 op = self.operator(tok)
             elif tok.type == (Lexer.WORD): #Word Token handling
-                if tok.value in self.operator_words:
-                    op = self.operator(tok)
-                else:
-                    first = self.currentToken
-                    self.advance()
-                    if self.currentToken.type == (Lexer.WORD):
-                        last = self.currentToken
-                        full = self.fullName(first, last)
+                first = self.currentToken
+                self.advance()
+                if self.currentToken.type == (Lexer.WORD):
+                    last = self.currentToken
+                    full = self.fullName(first, last)
             elif self.currentToken.type == Lexer.NEWTRANS:
                 trans = Nodes.TransactionNode(full, op)
                 transList.append(trans)
