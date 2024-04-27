@@ -112,6 +112,7 @@ class Interpreter:
                 return
         current_balance = self.visit(node.IDNode)
         if current_balance is None:
+        # Standard Command Operations
             return
         if node.operation == '+':
             new_balance = self.visit(node.IDNode) + self.visit(node.NumberNode)
