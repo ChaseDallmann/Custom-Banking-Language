@@ -7,10 +7,14 @@ namepart = letter , { letter } ;
 fullname = namepart , namepart ;
 float = (digit - "0"), { digit }, ".", digit, {digit} ;
 integer = (digit - "0"), {digit} ;
-sign = "+" | "-" ;
+sign = "+" | "-" | "*" ;
+operation_word = "with" | "deposit" | "create" | "drop" | "view" ;
 value = integer | float ;
 account = letter, letter, digit, digit, digit, digit, digit, digit ;
 
-command = fullname, account, sign, value ;
-transaction = fullname, ("deposited" | "withdrew"), value, ("into" | "from") ;
-return = fullname, transaction, account, "Your new balance is now:", value ;
+standard_command = fullname, account, sign | operation_word, value
+create_command = fullname, [account], "create"
+drop_command = fullname, [account], "drop"
+view_command = fullname, account, "view"
+
+
