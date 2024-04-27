@@ -15,8 +15,4 @@ while True:
     result, error = Lexer.run(text)
     parser = Parser.Parser(result)
     astList = parser.parse()
-    if error:
-        print(error.as_string())
-    else:
-        print(astList)
     Interpreter.Interpreter(astList).interpret()

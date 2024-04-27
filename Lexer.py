@@ -19,7 +19,7 @@ WORD = 'WORD'
 NEWTRANS = '~'
 ID = 'ID'
 CREATE = 'CREATE'
-REMOVE = 'REMOVE'
+DROP = 'DROP'
 VIEW = 'VIEW'
 
 
@@ -146,6 +146,8 @@ class Lexer:
             return Token.Token(MINUS, wordString)
         elif wordString.lower() in ('accrued', 'accrue', 'accrues'):
             return Token.Token(MULTIPLY, wordString)
+        elif wordString.lower() == 'create':
+            return Token.Token(CREATE, wordString)
         else:
             return Token.Token(WORD, wordString)
 

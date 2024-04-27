@@ -6,6 +6,8 @@ import Lexer
 
 class Parser:
     
+    operator_types = (Lexer.PLUS, Lexer.MINUS, Lexer.MULTIPLY, Lexer.CREATE, Lexer.DROP, Lexer.VIEW)
+    
     def __init__(self, tokens):
         self.tokens = tokens
         self.tokenIndex = 0
@@ -38,7 +40,7 @@ class Parser:
     # Creating an operator node
     def operator(self, tok):
         tok = tok.type
-        if tok in ('+', '-', '*'):
+        if tok in self.operator_types:
             operation = tok
         else:
             raise Exception(f"Unsupported operator: {tok}")
@@ -56,7 +58,7 @@ class Parser:
         trans = None
         while self.currentToken is not None and self.tokenIndex < len(self.tokens):
             tok = self.currentToken
-            if tok.type in (Lexer.PLUS, Lexer.MINUS, Lexer.MULTIPLY): #Operator Token handling
+            if tok.type in self.operator_types: #Operator Token handling
                 op = self.operator(tok)
             elif tok.type == (Lexer.WORD): #Word Token handling
                 first = self.currentToken

@@ -5,6 +5,7 @@ class Interpreter:
     # Constructor
     def __init__(self, astList):
         self.astList = astList
+        self.response = ''
         with open('Accounts.JSON', 'r') as f:
             self.data = json.loads(f.read())
     
@@ -42,7 +43,7 @@ class Interpreter:
         return node.value
     
     def visit_NameNode(self, node):
-        return f'{node.firstName.value} {node.lastName.value}'
+        self.response += f'Agent: {node.firstName.value} {node.lastName.value}'
 
     def visit_IDNode(self, node):
         return self.get_balance(node.account_id)
@@ -51,21 +52,26 @@ class Interpreter:
         if node.operation == '+':
             new_balance = self.visit(node.IDNode) + self.visit(node.NumberNode)
             self.change_balance(node.IDNode.account_id, new_balance)
-            return new_balance
+            self.response += f' deposited {node.NumberNode.value} into account {node.IDNode.account_id}. New balance: {new_balance}'
         elif node.operation == '-':
             new_balance = self.visit(node.IDNode) - self.visit(node.NumberNode)
             self.change_balance(node.IDNode.account_id, new_balance)
-            return new_balance
+            self.response += f' withdrew {node.NumberNode.value} from account {node.IDNode.account_id}. New balance: {new_balance}'
         elif node.operation == '*':
             new_balance = self.visit(node.IDNode) * self.visit(node.NumberNode)
             self.change_balance(node.IDNode.account_id, new_balance)
-            return new_balance
+            self.response += f' applied {(node.NumberNode.value * 100) - 100}% interest to account {node.IDNode.account_id}. New balance: {new_balance}'
         else:
             raise Exception(f"Invalid operation: {node.operation}")
         
     def interpret(self):
         for ast in self.astList:
+            self.response = ''
             self.visit(ast)
             self.save_data()
+            if self.response == '':
+                print("ERROR: No response")
+            else:
+                print(self.response)
             
             
