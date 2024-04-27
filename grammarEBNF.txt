@@ -14,7 +14,7 @@ account = letter, letter, digit, digit, digit, digit, digit, digit ;
 
 standard_command = fullname, account, sign | operation_word, value
 create_command = fullname, [account], "create"
-drop_command = fullname, [account], "drop"
+drop_command = fullname, account, "drop"
 view_command = fullname, account, "view"
 
 
