@@ -4,6 +4,7 @@ Chase Dallmann & John Petrie
 Shell
 We pledge that all the code we have written is our own code and not copied from any other source 4/28/24
 '''
+
 import Lexer
 import Parser
 import Interpreter
@@ -22,6 +23,7 @@ while True:
     else:
         continue
     result, error = Lexer.run(text) #Getting tokens from the Lexer
-    parser = Parser.Parser(result) #Creating the parser and passing through the tokens
-    astList = parser.parse() #Generating the AST from the paser
-    Interpreter.Interpreter(astList).interpret() #Banking logic that takes the AST and preforms operations
+    if not result == '':
+        parser = Parser.Parser(result) #Creating the parser and passing through the tokens
+        astList = parser.parse() #Generating the AST from the paser
+        Interpreter.Interpreter(astList).interpret() #Banking logic that takes the AST and preforms operations

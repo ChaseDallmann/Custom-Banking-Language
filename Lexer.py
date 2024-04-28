@@ -8,6 +8,7 @@ We pledge that all the code we have written is our own code and not copied from 
 import sys
 import Token
 import re
+import os
 
 # Defining all the Tokens Types that can exist
 PLUS = '+'
@@ -176,10 +177,12 @@ class Lexer:
 
 # A function to create and run the lexer
 def run(text):
-        if text.lower() == 'exit':
-            sys.exit('Exit entry found: Closing Banking Program')
+        if text.lower() == 'exit\n':
+            print('Exit entry found: Closing Banking Program')
+            os._exit(0)
         elif text.strip() == '':
-            sys.exit('No entry found: Closing Banking program')
+            print('No entry found')
+            return '', None
         else:
             lexer = Lexer(text)
             result = lexer.makeTokens()
