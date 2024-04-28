@@ -5,10 +5,8 @@ Lexer
 We pledge that all the code we have written is our own code and not copied from any other source 4/28/24
 '''
 
-import sys
 import Token
 import re
-import os
 
 # Defining all the Tokens Types that can exist
 PLUS = '+'
@@ -147,11 +145,13 @@ class Lexer:
         elif periodCount == 1:
             return Token.Token(FLOAT, float(numberString))
 
+    # A function to create a word token from letter characters
     def makeWord(self):
         wordString = ''
         while self.currentChar is not None and re.match("[a-zA-Z]", self.currentChar):
             wordString += self.currentChar
             self.advance()
+        # Checking to see if the word is an operator word
         if wordString.lower() in ('deposited', 'deposit', 'deposits'):
             return Token.Token(PLUS, wordString)
         elif wordString.lower() in ('withdrew', 'withdraw', 'withdraws'):
@@ -165,8 +165,10 @@ class Lexer:
         elif wordString.lower() in ('view', 'views', 'viewed'):
             return Token.Token(VIEW, wordString)
         else:
+            # If the word is not an operator word make it an agent name
             return Token.Token(WORD, wordString.upper())
 
+    # A function to create an ID token from a string
     def makeID(self):
         idString = ''
         while self.currentChar is not None and re.match("[a-zA-Z\\d]", self.currentChar):
@@ -177,10 +179,7 @@ class Lexer:
 
 # A function to create and run the lexer
 def run(text):
-        if text.lower() == 'exit\n':
-            print('Exit entry found: Closing Banking Program')
-            os._exit(0)
-        elif text.strip() == '':
+        if text.strip() == '':
             print('No entry found')
             return '', None
         else:

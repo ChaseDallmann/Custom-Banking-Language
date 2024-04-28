@@ -62,7 +62,7 @@ class Parser:
         self.advance()
         return Nodes.OperatorNode(tok, operation, account_node, number_node)
 
-    #Creates a transaction AST by passing in seperate nodes, then adds it to a list of ASTs
+    # Creates a transaction AST by passing in seperate nodes, then adds it to a list of ASTs to be interpreted
     def transaction(self):
         transList = []
         while self.currentToken is not None and self.tokenIndex < len(self.tokens):
