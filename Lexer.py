@@ -1,8 +1,15 @@
-import sys
+'''
+Chase Dallmann & John Petrie
+4/28/2024
+Lexer
+We pledge that all the code we have written is our own code and not copied from any other source 4/28/24
+'''
 
+import sys
 import Token
 import re
 
+# Defining all the Tokens Types that can exist
 PLUS = '+'
 MINUS = '-'
 MULTIPLY = '*'
@@ -25,7 +32,6 @@ DROP = 'DROP'
 VIEW = 'VIEW'
 
 
-########################## ERROR HANDLING ##########################
 class Error:  # Class for Error Handling
     def __init__(self, pos_start, pos_end, error_name, details):
         self.pos_start = pos_start
@@ -38,12 +44,13 @@ class Error:  # Class for Error Handling
         return result
 
 
+# Creating an IllegalCharError incase a character is entered that can't be handled
 class IllegalCharError(Error):
     def __init__(self, pos_start, pos_end, details):
         super().__init__(pos_start, pos_end, 'Illegal Character', details)
 
 
-########################## CHARACTER POSITION ##########################
+# Handling the tracking of the current character by index, line, and column
 class Position:
     def __init__(self, index, line, column, text):
         self.index = index
@@ -51,7 +58,8 @@ class Position:
         self.column = column
         self.text = text
 
-    def advance(self, currentChar):  # Advancing the current char
+    # A function to advance to the next character
+    def advance(self, currentChar):
         self.index += 1
         self.column += 1
 
@@ -70,11 +78,11 @@ class Position:
 class Lexer:
     def __init__(self, text):
         self.text = text
-        self.pos = Position(-1, 0, -1, text)  # Creating a position object
+        self.pos = Position(-1, 0, -1, text)  # Creating a position object starting at the first character in the text
         self.currentChar = None
         self.advance()
 
-    # Advancing the position of the lexer by 1
+    # Advancing the position of the Lexer by 1 from the current character
     def advance(self):
         self.pos.advance(self.currentChar)
         self.currentChar = self.text[self.pos.index] if self.pos.index < len(self.text) else None
@@ -83,6 +91,7 @@ class Lexer:
     def makeTokens(self):
         tokens = []  # Start with a blank token Array
 
+        # A dictionary to create TOKENS based in their KEY/VALUE if the lexer encounters this character
         charDictionary = {
             '+': Token.Token(PLUS, '+'),
             '-': Token.Token(MINUS, '-'),
@@ -95,20 +104,21 @@ class Lexer:
             '\t': None
         }
 
-        while self.currentChar is not None:
-            if self.currentChar.isdigit():
+        while self.currentChar is not None:  # Making sure a character is trying to be read and not blank
+            if self.currentChar.isdigit():  # Checking to see if the character is a digit
                 tokens.append(self.makeNumber())
-            elif re.match("[a-zA-Z]",self.currentChar):
-                match = re.match('\\d',self.text[self.pos.index + 2]) #Checking to see what the 3rd char is
-                if match and self.text[self.pos.index + 2] == match.group(0):
+            elif re.match("[a-zA-Z]", self.currentChar):  # Seeing if a character is a-z or A-Z
+                match = re.match('\\d', self.text[self.pos.index + 2])  # Checking to see what the 3rd char is
+                if match and self.text[self.pos.index + 2] == match.group(
+                        0):  # If the 3rd character is a digit we can make an ID token
                     tokens.append(self.makeID())
                 else:
-                    tokens.append(self.makeWord())
-            elif self.currentChar in charDictionary:
+                    tokens.append(self.makeWord())  # Make a word token
+            elif self.currentChar in charDictionary:  # Checking to see if the current char exists in the dictionary
                 if charDictionary[self.currentChar] is not None:
-                    tokens.append(charDictionary[self.currentChar])
+                    tokens.append(charDictionary[self.currentChar])  # Add that token to the list if found
                 self.advance()
-            else:
+            else:  # INVALID ENTRY: If none of the conditions are found create and error and return no tokens
                 pos_start = self.pos.copy()
                 char = self.currentChar
                 self.advance()
@@ -138,7 +148,7 @@ class Lexer:
 
     def makeWord(self):
         wordString = ''
-        while self.currentChar is not None and re.match("[a-zA-Z]",self.currentChar):
+        while self.currentChar is not None and re.match("[a-zA-Z]", self.currentChar):
             wordString += self.currentChar
             self.advance()
         if wordString.lower() in ('deposited', 'deposit', 'deposits'):
@@ -158,10 +168,11 @@ class Lexer:
 
     def makeID(self):
         idString = ''
-        while self.currentChar is not None and re.match("[a-zA-Z\\d]",self.currentChar):
+        while self.currentChar is not None and re.match("[a-zA-Z\\d]", self.currentChar):
             idString += self.currentChar.upper()
             self.advance()
         return Token.Token(ID, idString)
+
 
 # A function to create and run the lexer
 def run(text):
