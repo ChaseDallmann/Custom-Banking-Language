@@ -38,8 +38,7 @@ class Interpreter:
     def get_balance(self, account_id): # Function to get the balance of an account
         self.data.get(account_id)
         if account_id not in self.data:
-            self.response += f" attempted to access account {
-                account_id} which does not exist"
+            self.response += f" attempted to access account {account_id} which does not exist"
             return None
         return self.data[account_id]
 
@@ -105,8 +104,7 @@ class Interpreter:
         if node.operation == 'CREATE':
             if node.IDNode is not None and node.IDNode.account_id is not None:  # Check if the account ID is specified
                 if node.IDNode.account_id in self.data:  # Check if the account ID already exists
-                    self.response += f" attempted to create account {
-                        node.IDNode.account_id} which already exists"
+                    self.response += f" attempted to create account {node.IDNode.account_id} which already exists"
                     return
                 new_account_id = node.IDNode.account_id  # Use the specified account ID
                 # Create the account with a balance of 0
@@ -120,8 +118,7 @@ class Interpreter:
         # Handling deletion of accounts with a DROP operation
         if node.operation == 'DROP':
             if node.IDNode.account_id not in self.data:
-                self.response += f" attempted to delete account {
-                    node.IDNode.account_id} which does not exist"
+                self.response += f" attempted to delete account {node.IDNode.account_id} which does not exist"
                 return
             else:
                 del self.data[node.IDNode.account_id]
@@ -130,13 +127,11 @@ class Interpreter:
         # Handling viewing of accounts with a VIEW operation
         if node.operation == 'VIEW':
             if node.IDNode.account_id not in self.data:
-                self.response += f" attempted to view account {
-                    node.IDNode.account_id} which does not exist"
+                self.response += f" attempted to view account {node.IDNode.account_id} which does not exist"
                 return
             else:
                 balance = self.get_balance(node.IDNode.account_id)
-                self.response += f' viewed account {
-                    node.IDNode.account_id}. Balance: {balance}'
+                self.response += f' viewed account {node.IDNode.account_id}. Balance: {balance}'
                 return
         current_balance = self.visit(node.IDNode)
         if current_balance is None:
@@ -147,28 +142,24 @@ class Interpreter:
             new_balance = self.visit(node.IDNode) + self.visit(node.NumberNode) # visit the IDNode and NumberNode to get the values and add them
             self.change_balance(node.IDNode.account_id, new_balance)
             # Append the new balance and corresponding message to the response
-            self.response += f' deposited {node.NumberNode.value} into account {
-                node.IDNode.account_id}. New balance: {new_balance}'
+            self.response += f' deposited {node.NumberNode.value} into account {node.IDNode.account_id}. New balance: {new_balance}'
         # Handling withdrawals
         elif node.operation == '-':
             new_balance = self.visit(node.IDNode) - self.visit(node.NumberNode) # visit the IDNode and NumberNode to get the values and subtract them
             if new_balance < 0:
                 # Append the insufficient funds message to the response
-                self.response += f' attempted to withdraw {node.NumberNode.value} from account {
-                    node.IDNode.account_id}. Insufficient funds. Balance: {self.visit(node.IDNode)}.'
+                self.response += f' attempted to withdraw {node.NumberNode.value} from account {node.IDNode.account_id}. Insufficient funds. Balance: {self.visit(node.IDNode)}.'
                 return
             # if not insufficient funds, append the new balance to the response and update the balance
             self.change_balance(node.IDNode.account_id, new_balance)
-            self.response += f' withdrew {node.NumberNode.value} from account {
-                node.IDNode.account_id}. New balance: {new_balance}'
+            self.response += f' withdrew {node.NumberNode.value} from account {node.IDNode.account_id}. New balance: {new_balance}'
         # Handling interest
         elif node.operation == '*':
             new_balance = round(self.visit(node.IDNode) * # visit the IDNode and NumberNode to get the values and multiply them
                                 self.visit(node.NumberNode), 2)
             self.change_balance(node.IDNode.account_id, new_balance)
             # Multiply the interest by 100 to get the percentage and append to response
-            self.response += f' applied {(node.NumberNode.value * 100) - 100}% interest to account { 
-                node.IDNode.account_id}. New balance: {new_balance}' 
+            self.response += f' applied {(node.NumberNode.value * 100) - 100}% interest to account { node.IDNode.account_id}. New balance: {new_balance}' 
         else:
             raise Exception(f"Invalid operation: {node.operation}")
 
