@@ -35,5 +35,5 @@ while True:
     if not result == '':
         parser = Parser.Parser(result) # Creating the parser and passing through the tokens
         astList = parser.parse() # Generating the AST from the paser
-        Interpreter.Interpreter(astList).interpret() # Banking logic that takes the list of ASTs and preforms operations
+        Interpreter.Interpreter(astList).interpret() # Banking logic that takes the list of ASTs and performs operations
 

@@ -128,22 +128,20 @@ class Lexer:
     # A function to create a number/float from a string
     def makeNumber(self):
         numberString = ''
-        periodCount = 0
 
         while self.currentChar is not None and self.currentChar in DIGITS + '.':
             if self.currentChar == '.': # Checking for periods
-                if periodCount > 0:
-                    break
-                periodCount += 1
+                if "." in numberString:
+                    raise IllegalCharError(self.pos.copy(), self.pos, "Multiple periods in number")
                 numberString += '.'
             else:
                 numberString += self.currentChar
             self.advance()
 
-        if periodCount == 0:
+        if "." in numberString:
+            return Token.Token(FLOAT, float(numberString)) 
+        else:
             return Token.Token(INT, int(numberString))
-        elif periodCount == 1:
-            return Token.Token(FLOAT, float(numberString))
 
     # A function to create a word token from letter characters
     def makeWord(self):
