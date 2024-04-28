@@ -176,9 +176,15 @@ class Lexer:
 
 # A function to create and run the lexer
 def run(text):
-    if not text.lower() == '':
-        lexer = Lexer(text)
-        tokens, error = lexer.makeTokens()
-        return tokens, error
-    elif text.lower() == 'exit' or text.lower() == '':
-        sys.exit('Closing Banking Program')
+        if text.lower() == 'exit':
+            sys.exit('Exit entry found: Closing Banking Program')
+        elif text.strip() == '':
+            sys.exit('No entry found: Closing Banking program')
+        else:
+            lexer = Lexer(text)
+            result = lexer.makeTokens()
+            if result is not None:
+                tokens, error = result
+            else:
+                tokens = error = None
+            return tokens, error
