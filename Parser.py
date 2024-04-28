@@ -1,9 +1,6 @@
 import Nodes
 import Lexer
 
-
-
-
 class Parser:
     
     operator_types = (Lexer.PLUS, Lexer.MINUS, Lexer.MULTIPLY, Lexer.CREATE, Lexer.DROP, Lexer.VIEW)

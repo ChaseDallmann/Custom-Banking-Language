@@ -1,3 +1,5 @@
+import sys
+
 import Token
 import re
 
@@ -133,13 +135,12 @@ class Lexer:
             return Token.Token(INT, int(numberString))
         elif periodCount == 1:
             return Token.Token(FLOAT, float(numberString))
-        
+
     def makeWord(self):
         wordString = ''
         while self.currentChar is not None and re.match("[a-zA-Z]",self.currentChar):
             wordString += self.currentChar
             self.advance()
-
         if wordString.lower() in ('deposited', 'deposit', 'deposits'):
             return Token.Token(PLUS, wordString)
         elif wordString.lower() in ('withdrew', 'withdraw', 'withdraws'):
@@ -164,7 +165,9 @@ class Lexer:
 
 # A function to create and run the lexer
 def run(text):
-    lexer = Lexer(text)
-    tokens, error = lexer.makeTokens()
-
-    return tokens, error
+    if not text.lower() == '':
+        lexer = Lexer(text)
+        tokens, error = lexer.makeTokens()
+        return tokens, error
+    elif text.lower() == 'exit' or text.lower() == '':
+        sys.exit('Closing Banking Program')
