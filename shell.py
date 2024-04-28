@@ -21,7 +21,9 @@ while True:
             print('Exit entry found: Closing Banking Program')
             os._exit(0)
         if text.lower() == 'test\n':
-            text = 'TEST MODE CREATE\nTEST MODE TM000003 + 234\nTEST MODE TM000003 * 2\nTEST MODE TM000003 - 168\nTEST MODE TM000001 DROP\nTEST MODE TM123456 + 100000\nTEST MODE TM000002 withdraw 1000\nTEST MODE TM908652 CREATE\nTEST MODE TM908652 + 7347\n'
+            text = ('TEST MODE CREATE\nTEST MODE TM000003 + 234\nTEST MODE TM000003 * 2\n'
+                    'TEST MODE TM000003 - 168\nTEST MODE TM000001 DROP\nTEST MODE TM123456 + 100000\n'
+                    'TEST MODE TM000002 withdraw 1000\nTEST MODE TM908652 CREATE\nTEST MODE TM908652 + 7347\n')
     elif option == '2': #Getting the input from bankinginput.txt to read from
         with open('bankinginput.txt', 'r') as file:
             lines = file.readlines()
@@ -34,3 +36,4 @@ while True:
         parser = Parser.Parser(result) # Creating the parser and passing through the tokens
         astList = parser.parse() # Generating the AST from the paser
         Interpreter.Interpreter(astList).interpret() # Banking logic that takes the list of ASTs and preforms operations
+

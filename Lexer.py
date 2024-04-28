@@ -131,7 +131,7 @@ class Lexer:
         periodCount = 0
 
         while self.currentChar is not None and self.currentChar in DIGITS + '.':
-            if self.currentChar == '.':
+            if self.currentChar == '.': # Checking for periods
                 if periodCount > 0:
                     break
                 periodCount += 1
@@ -152,17 +152,17 @@ class Lexer:
             wordString += self.currentChar
             self.advance()
         # Checking to see if the word is an operator word
-        if wordString.lower() in ('deposited', 'deposit', 'deposits'):
+        if wordString.lower() in ('deposited', 'deposit', 'deposits'):  # Deposit handling
             return Token.Token(PLUS, wordString)
-        elif wordString.lower() in ('withdrew', 'withdraw', 'withdraws'):
+        elif wordString.lower() in ('withdrew', 'withdraw', 'withdraws'):  # Withdraw handling
             return Token.Token(MINUS, wordString)
-        elif wordString.lower() in ('accrued', 'accrue', 'accrues'):
+        elif wordString.lower() in ('accrued', 'accrue', 'accrues'):  # Intrest handling
             return Token.Token(MULTIPLY, wordString)
-        elif wordString.lower() in ('create', 'open', 'creates', 'opens', 'opened'):
+        elif wordString.lower() in ('create', 'open', 'creates', 'opens', 'opened'):  # Account Creation handling
             return Token.Token(CREATE, wordString)
-        elif wordString.lower() in ('drop', 'close', 'drops', 'closes', 'closed'):
+        elif wordString.lower() in ('drop', 'close', 'drops', 'closes', 'closed'):  # Account Deletion handling
             return Token.Token(DROP, wordString)
-        elif wordString.lower() in ('view', 'views', 'viewed'):
+        elif wordString.lower() in ('view', 'views', 'viewed'):  # View an account handling
             return Token.Token(VIEW, wordString)
         else:
             # If the word is not an operator word make it an agent name
